@@ -80,3 +80,8 @@ Role-based access:
 - AGENT: Read-only
 - HANDLER: Modify gadgets
 - DIRECTOR: Full access
+
+## TO-DO
+
+[] Create and build docker container
+[] Deploy to Production
