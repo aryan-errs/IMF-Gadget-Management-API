@@ -93,21 +93,37 @@ export const decommissionGadget = async (req: Request, res: Response) => {
   }
 };
 
+
 export const selfDestruct = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { confirmationCode } = req.body;
 
-    // Simulated confirmation code generation
+    // Validate input
+    if (!confirmationCode) {
+      return res.status(400).json({ message: 'Confirmation code is required' });
+    }
+
+    // Generate expected confirmation code (simulated)
     const expectedCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
+    // Check if confirmation code matches
     if (confirmationCode !== expectedCode) {
       return res.status(403).json({
-        message: 'Invalid self-destruct confirmation',
-        requiredCode: expectedCode  // In real scenario, this would never be returned
+        message: 'Invalid self-destruct confirmation code'
       });
     }
 
+    // Retrieve gadget
+    const gadget = await prisma.gadget.findUnique({
+      where: { id }
+    });
+
+    if (!gadget) {
+      return res.status(404).json({ message: 'Gadget not found' });
+    }
+
+    // Update gadget status to destroyed
     const destroyedGadget = await prisma.gadget.update({
       where: { id },
       data: {
@@ -118,9 +134,15 @@ export const selfDestruct = async (req: Request, res: Response) => {
 
     res.json({
       message: 'Self-destruct sequence activated',
-      gadget: destroyedGadget
+      gadget: destroyedGadget,
+      // Include generated code for testing/verification
+      generatedCode: expectedCode
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error in self-destruct sequence', error });
+    res.status(500).json({
+      message: 'Error in self-destruct sequence',
+      error: error instanceof Error ? error.message : error
+    });
   }
 };
+
