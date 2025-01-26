@@ -83,5 +83,5 @@ Role-based access:
 
 ## TO-DO
 
-[] Create and build docker container
-[] Deploy to Production
+- [ ] Create and build Docker container
+- [ ] Deploy to Production
