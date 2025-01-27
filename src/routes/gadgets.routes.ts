@@ -34,4 +34,10 @@ router.post('/:id/self-destruct',
   GadgetController.selfDestruct
 );
 
+router.post('/gadgets/:id/request-self-destruct',
+  authenticateToken,
+  authorizeRoles(['DIRECTOR']),
+  GadgetController.requestSelfDestruct
+);
+
 export default router;

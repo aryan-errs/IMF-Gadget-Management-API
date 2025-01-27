@@ -24,6 +24,7 @@ model Gadget {
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
   decommissionedAt    DateTime?
+  confirmationCode    String?
 }
 
 model User {
